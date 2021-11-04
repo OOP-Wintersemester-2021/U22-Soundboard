@@ -1,18 +1,9 @@
-import de.ur.mi.oop.app.GraphicsApp;
-import de.ur.mi.oop.events.KeyPressedEvent;
-import de.ur.mi.oop.events.MousePressedEvent;
-import de.ur.mi.oop.launcher.GraphicsAppLauncher;
-
-public class Soundboard extends GraphicsApp implements Config{
+public class Soundboard {
     // Private statische Konstanten
-    private static final int CANVAS_HEIGHT = 800;
-    private static final int CANVAS_WIDTH = 800;
-    private static final int FRAME_RATE = 30;
-
     private static final int ELEMENTS_PER_ROW = 3;
     private static final int ELEMENTS_PER_COLUMN = 3;
-    private static final float ELEMENT_WIDTH = CANVAS_WIDTH/ELEMENTS_PER_ROW;
-    private static final float ELEMENT_HEIGHT = CANVAS_HEIGHT/ELEMENTS_PER_COLUMN;
+    private static float elementWidth;
+    private static float elementHeight;
 
     // In diesem zweidimensionalen Array werden die Elemente, die gezeichnet werden sollen abgelegt.
     private SoundBoardElement[][] elements;
@@ -21,11 +12,10 @@ public class Soundboard extends GraphicsApp implements Config{
         Die initialize-Methode wird einmalig zum Start der Anwendung ausgeführt.
         Hier wird die GraphicsApp-Umgebung angepasst und das zweidimensionale Array initialisiert.
      */
-    @Override
-    public void initialize() {
-        setCanvasSize(CANVAS_WIDTH, CANVAS_HEIGHT);
-        setFrameRate(FRAME_RATE);
+    public void initialize(int canvasWidth, int canvasHeight) {
         elements = new SoundBoardElement[ELEMENTS_PER_ROW][ELEMENTS_PER_COLUMN];
+        elementWidth = canvasWidth/ELEMENTS_PER_ROW;
+        elementHeight = canvasHeight/ELEMENTS_PER_COLUMN;
 
         initializeElements();
         setElementPositions();
@@ -38,15 +28,15 @@ public class Soundboard extends GraphicsApp implements Config{
         Die Elemente werden alle erstmal an der Position 0, 0 erzeugt.
      */
     private void initializeElements() {
-        elements[0][0] = new SoundBoardElement("Hund", DOG_IMAGE_PATH, DOG_SOUND_PATH, ELEMENT_WIDTH, ELEMENT_HEIGHT);
-        elements[0][1] = new SoundBoardElement("Katze", CAT_IMAGE_PATH, CAT_SOUND_PATH, ELEMENT_WIDTH, ELEMENT_HEIGHT);
-        elements[0][2] = new SoundBoardElement("Bär", BEAR_IMAGE_PATH, BEAR_SOUND_PATH, ELEMENT_WIDTH, ELEMENT_HEIGHT);
-        elements[1][0] = new SoundBoardElement("Löwe", LION_IMAGE_PATH, LION_SOUND_PATH, ELEMENT_WIDTH, ELEMENT_HEIGHT);
-        elements[1][1] = new SoundBoardElement("Grille", CRICKET_IMAGE_PATH, CRICKET_SOUND_PATH, ELEMENT_WIDTH, ELEMENT_HEIGHT);
-        elements[1][2] = new SoundBoardElement("Vogel", BIRD_IMAGE_PATH, BIRD_SOUND_PATH, ELEMENT_WIDTH, ELEMENT_HEIGHT);
-        elements[2][0] = new SoundBoardElement("Pferd", HORSE_IMAGE_PATH, HORSE_SOUND_PATH, ELEMENT_WIDTH, ELEMENT_HEIGHT);
-        elements[2][1] = new SoundBoardElement("Schwein", PIG_IMAGE_PATH, PIG_SOUND_PATH, ELEMENT_WIDTH, ELEMENT_HEIGHT);
-        elements[2][2] = new SoundBoardElement("Elefant", ELEFANT_IMAGE_PATH, ELEPHANT_SOUND_PATH, ELEMENT_WIDTH, ELEMENT_HEIGHT);
+        elements[0][0] = new SoundBoardElement("Hund", Constants.DOG_IMAGE_PATH, Constants.DOG_SOUND_PATH, elementWidth, elementHeight);
+        elements[0][1] = new SoundBoardElement("Katze", Constants.CAT_IMAGE_PATH, Constants.CAT_SOUND_PATH, elementWidth, elementHeight);
+        elements[0][2] = new SoundBoardElement("Bär", Constants.BEAR_IMAGE_PATH, Constants.BEAR_SOUND_PATH, elementWidth, elementHeight);
+        elements[1][0] = new SoundBoardElement("Löwe", Constants.LION_IMAGE_PATH, Constants.LION_SOUND_PATH, elementWidth, elementHeight);
+        elements[1][1] = new SoundBoardElement("Grille", Constants.CRICKET_IMAGE_PATH, Constants.CRICKET_SOUND_PATH, elementWidth, elementHeight);
+        elements[1][2] = new SoundBoardElement("Vogel", Constants.BIRD_IMAGE_PATH, Constants.BIRD_SOUND_PATH, elementWidth, elementHeight);
+        elements[2][0] = new SoundBoardElement("Pferd", Constants.HORSE_IMAGE_PATH, Constants.HORSE_SOUND_PATH, elementWidth, elementHeight);
+        elements[2][1] = new SoundBoardElement("Schwein", Constants.PIG_IMAGE_PATH, Constants.PIG_SOUND_PATH, elementWidth, elementHeight);
+        elements[2][2] = new SoundBoardElement("Elefant", Constants.ELEFANT_IMAGE_PATH, Constants.ELEPHANT_SOUND_PATH, elementWidth, elementHeight);
     }
 
     /*
@@ -60,8 +50,8 @@ public class Soundboard extends GraphicsApp implements Config{
     private void setElementPositions() {
         for (int i = 0; i < ELEMENTS_PER_COLUMN; i++) {
             for (int j = 0; j < ELEMENTS_PER_ROW; j++) {
-                float xPos = j * ELEMENT_WIDTH;
-                float yPos = i * ELEMENT_HEIGHT;
+                float xPos = j * elementWidth;
+                float yPos = i * elementHeight;
                 elements[i][j].setPosition(xPos, yPos);
             }
         }
@@ -72,7 +62,6 @@ public class Soundboard extends GraphicsApp implements Config{
         Hier wird jedes Element im Array einmal gezeichnet indem mit einer doppelten for-Schleife, jedes Element im
         2D-Array einmal besucht wird.
      */
-    @Override
     public void draw() {
         for (int i = 0; i < ELEMENTS_PER_COLUMN; i++) {
             for (int j = 0; j < ELEMENTS_PER_ROW; j++) {
@@ -82,17 +71,13 @@ public class Soundboard extends GraphicsApp implements Config{
     }
 
     /*
-        Die onMousePressed-Methode wird aufgerufen, wenn in den Canvas geklickt wird.
         Dann wird überprüft, welches Element sich an der x- und y-Position des Klicks befindet und von dem entsprechenden
         Element die playSound-Mehtode aufgerufen.
         Dazu wird jedes Element im 2D-Array einmal besucht und mit hitTest überprüft, ob es getroffen wurde.
         Wurde ein passendes Element gefunden, müssen die restlichen nicht meher besucht werden. Die Methode wird mit
         return verlassen.
      */
-    @Override
-    public void onMousePressed(MousePressedEvent mousePressedEvent) {
-        float mouseX = mousePressedEvent.getXPos();
-        float mouseY = mousePressedEvent.getYPos();
+    public void onSoundboardClicked(float mouseX, float mouseY) {
         for (int i = 0; i < ELEMENTS_PER_COLUMN; i++) {
             for (int j = 0; j < ELEMENTS_PER_ROW; j++) {
                 if(elements[i][j].hitTest(mouseX, mouseY)){
@@ -101,16 +86,6 @@ public class Soundboard extends GraphicsApp implements Config{
                 }
             }
         }
-    }
-
-    /*
-        Die onKeyPressed-Methode wird aufgerufen, wenn ein Knopf auf der Tastatur gedrückt wird.
-        Dann wird der mit dem Knopf korrespondierende Character an die playSoundForKeyChar-Methode übergeben.
-     */
-    @Override
-    public void onKeyPressed(KeyPressedEvent keyPressedEvent) {
-        char keyChar = keyPressedEvent.getKeyChar();
-        playSoundForKeyChar(keyChar);
     }
 
     /*
@@ -124,13 +99,11 @@ public class Soundboard extends GraphicsApp implements Config{
         Wurde ein passendes Element gefunden, muss nicht weiter gesucht werden und die Methode kann per return verlassen
         werden.
      */
-    private void playSoundForKeyChar(char keyChar) {
+    public void playSoundForKeyChar(char keyChar) {
         keyChar = Character.toLowerCase(keyChar);
         for (int i = 0; i < ELEMENTS_PER_COLUMN; i++) {
             for (int j = 0; j < ELEMENTS_PER_ROW; j++) {
-                String currName = elements[i][j].getName();
-                char currChar = currName.charAt(0);
-                currChar = Character.toLowerCase(currChar);
+                char currChar = getCurrChar(elements[i][j]);
                 if(currChar == keyChar) {
                     elements[i][j].playSound();
                     return;
@@ -139,8 +112,12 @@ public class Soundboard extends GraphicsApp implements Config{
         }
     }
 
-    public static void main(String[] args) {
-        GraphicsAppLauncher.launch();
+    // Die getCurrChar-Methode gibt den ersten Buchstaben des Namens des übergebenen Elements als Kleinbuchstaben zurück.
+    private char getCurrChar(SoundBoardElement soundBoardElement) {
+        String currName = soundBoardElement.getName();
+        char currChar = currName.charAt(0);
+        currChar = Character.toLowerCase(currChar);
+        return currChar;
     }
 
 }
