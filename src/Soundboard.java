@@ -2,17 +2,23 @@ public class Soundboard {
     // Private statische Konstanten
     private static final int ELEMENTS_PER_ROW = 3;
     private static final int ELEMENTS_PER_COLUMN = 3;
+
+    // Höhe und Breite eines Soundboard Elements
     private static float elementWidth;
     private static float elementHeight;
 
     // In diesem zweidimensionalen Array werden die Elemente, die gezeichnet werden sollen abgelegt.
     private SoundBoardElement[][] elements;
 
+    public Soundboard(int canvasWidth, int canvasHeight) {
+        initialize(canvasWidth, canvasHeight);
+    }
+
     /*
         Die initialize-Methode wird einmalig zum Start der Anwendung ausgeführt.
-        Hier wird die GraphicsApp-Umgebung angepasst und das zweidimensionale Array initialisiert.
+        Hier wird das zweidimensionale Array initialisiert.
      */
-    public void initialize(int canvasWidth, int canvasHeight) {
+    private void initialize(int canvasWidth, int canvasHeight) {
         elements = new SoundBoardElement[ELEMENTS_PER_ROW][ELEMENTS_PER_COLUMN];
         elementWidth = canvasWidth/ELEMENTS_PER_ROW;
         elementHeight = canvasHeight/ELEMENTS_PER_COLUMN;
@@ -58,7 +64,6 @@ public class Soundboard {
     }
 
     /*
-        Die draw-Methode wird 60 mal in der Sekunde aufgerufen.
         Hier wird jedes Element im Array einmal gezeichnet indem mit einer doppelten for-Schleife, jedes Element im
         2D-Array einmal besucht wird.
      */

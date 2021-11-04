@@ -13,14 +13,18 @@ public class SoundboardApp extends GraphicsApp {
     private Soundboard soundboard;
 
 
+    /*
+        Die initialize-Methode wird einmalig zum Start der Anwendung ausgeführt.
+        Hier wird die GraphicsApp-Umgebung angepasst und das Soundboard initialisiert.
+     */
     @Override
     public void initialize() {
         setCanvasSize(CANVAS_WIDTH, CANVAS_HEIGHT);
         setFrameRate(FRAME_RATE);
-        soundboard = new Soundboard();
-        soundboard.initialize(CANVAS_WIDTH, CANVAS_HEIGHT);
+        soundboard = new Soundboard(CANVAS_WIDTH, CANVAS_HEIGHT);
     }
 
+    // Die draw-Methode wird 30 mal in der Sekunde aufgerufen.
     @Override
     public void draw() {
         soundboard.draw();
