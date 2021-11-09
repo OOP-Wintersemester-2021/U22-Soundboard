@@ -9,48 +9,29 @@ public class SoundboardApp extends GraphicsApp {
     private static final int CANVAS_WIDTH = 800;
     private static final int FRAME_RATE = 30;
 
-    // Das Soundboard-Objekt übernimmt die Darstellung des und Interaktion mit dem Soundboard.
-    private Soundboard soundboard;
-
-
-    /*
-        Die initialize-Methode wird einmalig zum Start der Anwendung ausgeführt.
-        Hier wird die GraphicsApp-Umgebung angepasst und das Soundboard initialisiert.
-     */
+    // Die initialize-Methode wird einmalig zum Start der Anwendung ausgeführt.
     @Override
     public void initialize() {
         setCanvasSize(CANVAS_WIDTH, CANVAS_HEIGHT);
         setFrameRate(FRAME_RATE);
-        soundboard = new Soundboard(CANVAS_WIDTH, CANVAS_HEIGHT);
     }
 
     // Die draw-Methode wird 30 mal in der Sekunde aufgerufen.
     @Override
     public void draw() {
-        soundboard.draw();
+
     }
 
-    /*
-        Die onKeyPressed-Methode wird aufgerufen, wenn ein Knopf auf der Tastatur gedrückt wird.
-        Dann wird der mit dem Knopf korrespondierende Character an die playSoundForKeyChar-Methode des Soundboards
-        übergeben.
-     */
+    // Die onKeyPressed-Methode wird aufgerufen, wenn ein Knopf auf der Tastatur gedrückt wird.
     @Override
     public void onKeyPressed(KeyPressedEvent keyPressedEvent) {
-        char keyChar = keyPressedEvent.getKeyChar();
-        soundboard.playSoundForKeyChar(keyChar);
+        // React to KeyPressedEvent
     }
 
-    /*
-        Die onMousePressed-Methode wird aufgerufen, wenn in den Canvas geklickt wird.
-        Die x- und y-Position des Klicks wird dann an das Soundboard übergeben, wo das angeklickte Element ermittelt
-        wird.
-     */
+    // Die onMousePressed-Methode wird aufgerufen, wenn in den Canvas geklickt wird.
     @Override
     public void onMousePressed(MousePressedEvent mousePressedEvent) {
-        float mouseX = mousePressedEvent.getXPos();
-        float mouseY = mousePressedEvent.getYPos();
-        soundboard.onSoundboardClicked(mouseX, mouseY);
+        // React to mousePressedEvent
     }
 
     public static void main(String[] args) {
